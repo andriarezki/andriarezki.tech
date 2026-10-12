@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Andria Rezki, M.Kom — IT Systems & Database professional. Server and network administration, database development, IT monitoring and web applications.">
+<meta property="og:title" content="Andria Rezki — IT Systems & Database">
+<meta property="og:description" content="Portfolio: apps built, skills, experience and research.">
+<meta property="og:url" content="https://andriarezki.tech/">
+<meta name="theme-color" content="#08121f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2308121f'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' font-weight='700' fill='%2348d6aa' text-anchor='middle'%3EAR%3C/text%3E%3C/svg%3E">
+<title>Andria Rezki Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: control-room console. Fixed nav, hero split into identity + live status panel,
+   then stacked sections on a faint blueprint grid with a reactive network canvas behind. */
+:root{
+  --bg:#08121f;          /* deep server-room navy */
+  --panel:#0d1c2c;       /* raised console surface */
+  --line:#1d3448;        /* hairlines and grid */
+  --fg:#e3edf2;          /* primary text */
+  --muted:#8ea6b4;       /* secondary text, slight teal bias */
+  --accent:#48d6aa;      /* mint signal, matches LinkedIn banner */
+  --amber:#f2b84b;       /* status / warning tone */
+  --f-display:"Chakra Petch","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 var(--f-body);overflow-x:hidden}
+body.lang-en [data-l="id"],body.lang-id [data-l="en"]{display:none!important}
+#net{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:48px 48px;opacity:.18;mask-image:radial-gradient(ellipse at 30% 20%,#000 20%,transparent 75%)}
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding-inline:20px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+/* nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:20px;padding-block:12px}
+.logo{font:700 18px var(--f-display);letter-spacing:.06em;color:var(--fg);text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo i{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2.4s infinite}
+.links{display:flex;gap:18px;margin-left:auto;flex-wrap:wrap}
+.links a{color:var(--muted);text-decoration:none;font:500 13px var(--f-mono);letter-spacing:.04em}
+.links a:hover{color:var(--accent)}
+.lang{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--muted);font:500 12px var(--f-mono);padding:6px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+@media (max-width:760px){.links{display:none}.lang{margin-left:auto}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding-block:72px 56px}
+.hero>*{min-width:0}
+.eyebrow{font:500 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--accent)}
+h1{font:700 clamp(40px,6.4vw,76px)/1.02 var(--f-display);margin:18px 0 10px;letter-spacing:-.01em;text-wrap:balance}
+h1 .deg{font-size:.36em;color:var(--muted);font-weight:500;letter-spacing:.04em;vertical-align:.9em}
+.role{font:500 clamp(17px,2vw,21px)/1.4 var(--f-display);color:var(--accent);min-height:1.4em}
+.role .cur{display:inline-block;width:.55em;height:1em;background:var(--accent);vertical-align:-.12em;margin-left:3px;animation:blink 1s steps(1) infinite}
+.lede{color:var(--muted);max-width:56ch;margin:18px 0 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{font:600 14px var(--f-display);letter-spacing:.06em;text-transform:uppercase;padding:12px 20px;border-radius:6px;text-decoration:none;border:1px solid var(--accent);cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn.pri{background:var(--accent);color:var(--bg)}
+.btn.sec{background:transparent;color:var(--accent)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px -8px var(--accent)}
+
+/* status console */
+.console{background:linear-gradient(180deg,var(--panel),color-mix(in srgb,var(--panel) 70%,var(--bg)));border:1px solid var(--line);border-radius:12px;padding:20px;font-family:var(--f-mono);font-size:13px;position:relative;overflow:hidden}
+.console::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--accent) 7%,transparent),transparent);height:40%;animation:scan 5s linear infinite;pointer-events:none}
+.c-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+.ok{color:var(--accent);display:flex;align-items:center;gap:8px}
+.ok::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.uptime{font:600 clamp(20px,2.6vw,26px) var(--f-display);color:var(--fg);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.c-label{color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.c-row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin-top:16px}
+.meter{grid-column:1/-1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.meter span{display:block;height:100%;background:var(--accent);width:var(--w);transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.c-val{color:var(--accent);font-variant-numeric:tabular-nums}
+.c-foot{margin-top:16px;color:var(--muted);font-size:11.5px;border-top:1px dashed var(--line);padding-top:12px}
+
+/* sections */
+section{padding-block:64px;border-top:1px solid var(--line)}
+.shop-lede{color:var(--muted);max-width:62ch;margin:-14px 0 26px}
+.shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.prod{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:var(--fg);transition:transform .2s,border-color .2s,box-shadow .2s}
+.prod:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 14px 34px -18px var(--accent)}
+.prod img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--bg)}
+.prod .pb{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.prod .ptag{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.prod h3{font:700 19px/1.25 var(--f-display);margin:0}
+.prod .ps{color:var(--muted);font-size:14px;margin:0}
+.prod .pr{display:flex;align-items:baseline;gap:10px;margin-top:auto;padding-top:10px;font-family:var(--f-display)}
+.prod .pr b{font-size:22px;color:var(--accent)}.prod .pr s{color:var(--muted);font-size:14px}
+.prod .badge{align-self:flex-start;font:600 11px var(--f-mono);letter-spacing:.08em;background:var(--accent);color:var(--bg);border-radius:4px;padding:2px 8px}
+.shop-more{margin-top:24px}
+.sec-h{display:flex;align-items:baseline;gap:16px;margin-bottom:32px;flex-wrap:wrap}
+.sec-h code{font:500 12px var(--f-mono);color:var(--accent);letter-spacing:.06em}
+h2{font:700 clamp(28px,3.6vw,40px)/1.1 var(--f-display);margin:0;text-wrap:balance}
+.about{display:grid;grid-template-columns:1.3fr 1fr;gap:40px}
+.about>*{min-width:0}
+.about p{margin:0 0 14px;max-width:62ch;color:var(--fg)}
+.facts{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;align-self:start}
+.fact{background:var(--panel);padding:14px 18px;display:grid;grid-template-columns:110px 1fr;gap:12px;font-size:14px}
+.fact b{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+
+/* impact */
+.impact{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:24px;background:color-mix(in srgb,var(--panel) 80%,transparent);transition:border-color .3s,transform .3s}
+.kpi:hover{border-color:var(--accent);transform:translateY(-4px)}
+.kpi .num{font:700 56px/1 var(--f-display);color:var(--accent);font-variant-numeric:tabular-nums}
+.kpi .num small{font-size:.45em;margin-left:2px}
+.kpi h3{font:600 17px var(--f-display);margin:14px 0 6px;letter-spacing:.02em}
+.kpi p{margin:0;color:var(--muted);font-size:14px}
+.bars{display:flex;align-items:flex-end;gap:6px;height:44px;margin-top:18px}
+.bars i{flex:1;background:var(--line);border-radius:2px 2px 0 0;height:var(--h)}
+.bars i.after{background:var(--accent)}
+.bars-cap{display:flex;justify-content:space-between;font:11px var(--f-mono);color:var(--muted);margin-top:6px}
+
+/* experience log */
+.log{position:relative;padding-left:28px}
+.log::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:linear-gradient(var(--accent),var(--line))}
+.job{position:relative;margin-bottom:22px;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--panel) 85%,transparent)}
+.job::before{content:"";position:absolute;left:-27px;top:22px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--muted)}
+.job.now::before{border-color:var(--accent);background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.job summary{list-style:none;cursor:pointer;padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:baseline}
+.job summary::-webkit-details-marker{display:none}
+.job summary>*{min-width:0}
+.job h3{font:600 19px var(--f-display);margin:0}
+.job .org{color:var(--muted);font-size:14px;grid-column:1}
+.job .when{font:500 12px var(--f-mono);color:var(--accent);grid-row:1;grid-column:2;white-space:nowrap}
+.job .tog{grid-column:2;font:12px var(--f-mono);color:var(--muted);text-align:right}
+.job .tog::after{content:"+ details"}
+.job[open] .tog::after{content:"− close"}
+.job ul{margin:0;padding:0 20px 20px 40px;color:var(--fg);font-size:15px}
+.job li{margin-bottom:6px}
+.job li::marker{color:var(--accent)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;padding:0 20px 20px}
+.tag{font:11.5px var(--f-mono);color:var(--muted);border:1px solid var(--line);padding:3px 8px;border-radius:4px}
+
+/* skill rack */
+.rack-ctl{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.chip{font:500 12.5px var(--f-mono);background:none;color:var(--muted);border:1px solid var(--line);padding:7px 12px;border-radius:999px;cursor:pointer;transition:all .2s}
+.chip[aria-pressed="true"],.chip:hover{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+.rack{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+.unit{display:grid;grid-template-columns:46px 1fr 150px;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid var(--line);transition:opacity .3s,background .3s}
+.unit:last-child{border-bottom:0}
+.unit .u{font:11px var(--f-mono);color:var(--muted)}
+.unit .nm{font-weight:500;min-width:0}
+.unit .nm small{display:block;color:var(--muted);font:11.5px var(--f-mono);letter-spacing:.04em}
+.leds{display:flex;gap:4px;justify-content:flex-end}
+.leds i{width:16px;height:6px;border-radius:2px;background:var(--line)}
+.leds i.on{background:var(--accent);box-shadow:0 0 6px color-mix(in srgb,var(--accent) 60%,transparent)}
+.unit.dim{opacity:.22}
+.unit.hit{background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.rack-note{font:12px var(--f-mono);color:var(--muted);margin-top:10px}
+
+/* research */
+.research{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.research>*{min-width:0}
+.card{border:1px solid var(--line);border-radius:10px;padding:24px;background:color-mix(in srgb,var(--panel) 85%,transparent)}
+.card h3{font:600 18px var(--f-display);margin:0 0 6px}
+.card .k{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
+.knn{width:100%;height:auto;max-width:100%;display:block;margin-top:14px;border-radius:8px;background:var(--bg);border:1px solid var(--line);cursor:crosshair}
+.knn-cap{font:12px var(--f-mono);color:var(--muted);margin-top:8px}
+.edu{display:grid;gap:16px;margin:0;padding:0;list-style:none}
+.edu li{display:grid;grid-template-columns:86px 1fr;gap:12px}
+.edu .yr{font:500 12px var(--f-mono);color:var(--accent);padding-top:3px}
+.edu b{display:block;font-weight:600}
+.edu span{color:var(--muted);font-size:14px}
+
+/* terminal */
+.term{background:#050b14;border:1px solid var(--line);border-radius:12px;overflow:hidden;font:13.5px/1.6 var(--f-mono)}
+.term-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px}
+.term-bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.term-bar i:first-child{background:#e2645a}.term-bar i:nth-child(2){background:var(--amber)}.term-bar i:nth-child(3){background:var(--accent)}
+.term-bar span{margin-left:8px}
+.term-out{padding:16px 18px 4px;height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;color:var(--fg)}
+.term-out .p{color:var(--accent)}
+.term-out .m{color:var(--muted)}
+.term-out .a{color:var(--amber)}
+.term-in{display:flex;gap:8px;padding:8px 18px 16px;align-items:center}
+.term-in label{color:var(--accent);white-space:nowrap}
+.term-in input{flex:1;min-width:0;background:none;border:0;color:var(--fg);font:inherit;outline:none;caret-color:var(--accent)}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:start}
+.contact>*{min-width:0}
+.contact p{color:var(--muted);max-width:52ch}
+.c-list{display:grid;gap:12px}
+.c-item{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--panel);flex-wrap:wrap}
+.c-item .c-label{width:72px}
+.c-item .v{font:500 15px var(--f-mono);flex:1;min-width:0;word-break:break-all;user-select:all}
+.copy{background:none;border:1px solid var(--line);color:var(--muted);font:12px var(--f-mono);padding:5px 10px;border-radius:5px;cursor:pointer}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+footer{padding-block:28px;border-top:1px solid var(--line);color:var(--muted);font:12px var(--f-mono);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+
+/* icons */
+.ico{width:18px;height:18px;flex:none;stroke-width:1.75}
+.si{width:22px;height:22px;flex:none;display:inline-grid;place-items:center;font:600 9px var(--f-mono);color:var(--muted)}
+.si svg{width:100%;height:100%;display:block}
+/* skill rack icon column */
+.unit{grid-template-columns:46px 34px 1fr 150px}
+.unit .ui{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent)}
+@media (max-width:520px){.unit{grid-template-columns:30px 30px 1fr 70px}.unit .ui{width:30px;height:30px}}
+.flag{display:inline-block;margin-left:8px;font:600 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;vertical-align:2px}
+.flag.hot{color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 50%,transparent);background:color-mix(in srgb,var(--amber) 10%,transparent)}
+.flag.learn{color:var(--muted);border:1px dashed var(--line)}
+.unit[data-f="learn"] .leds i.on{background:var(--muted);box-shadow:none}
+/* tech stack */
+.stack-h{font:500 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:40px 0 14px}
+.stack{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.tech{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--panel) 85%,transparent);transition:transform .25s,border-color .25s,box-shadow .25s}
+.tech:hover{transform:translateY(-3px);border-color:var(--c,var(--accent));box-shadow:0 10px 24px -14px var(--c,var(--accent))}
+.tech .tile{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--c,var(--accent)) 16%,var(--bg))}
+.tech .si{width:22px;height:22px}
+.tech b{font:600 14px var(--f-display);letter-spacing:.02em;display:block;line-height:1.2}
+.tech small{font:11px var(--f-mono);color:var(--muted)}
+/* projects */
+.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.proj{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--panel) 88%,transparent);overflow:hidden;transition:transform .3s,border-color .3s}
+.proj:hover{transform:translateY(-4px);border-color:var(--accent)}
+.proj .shot{aspect-ratio:16/9;max-width:100%;position:relative;background:var(--bg);border-bottom:1px solid var(--line);overflow:hidden}
+.proj .shot canvas{width:100%;height:100%;display:block}
+.proj .badge{position:absolute;top:10px;left:10px;font:500 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:4px;background:color-mix(in srgb,var(--bg) 80%,transparent);color:var(--accent);border:1px solid var(--line);display:flex;align-items:center;gap:6px}
+.proj .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.proj .body{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.proj .cat{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:8px}
+.proj h3{font:600 19px/1.25 var(--f-display);margin:0}
+.proj p{margin:0;color:var(--muted);font-size:14.5px}
+.proj .feat{margin:0;padding-left:18px;font-size:14px}
+.proj .feat li::marker{color:var(--accent)}
+.proj .uses{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
+.use{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--f-mono);padding:5px 9px 5px 6px;border-radius:6px;border:1px solid var(--line);color:var(--fg);background:var(--bg)}
+.use .si,.use .ico{width:15px;height:15px}
+@media (max-width:900px){.projects{grid-template-columns:1fr}}
+
+@keyframes pulse{50%{opacity:.4}}
+@keyframes blink{50%{opacity:0}}
+@keyframes scan{from{transform:translateY(-100%)}to{transform:translateY(260%)}}
+@keyframes rise{from{transform:translateY(14px);opacity:.001}to{transform:none;opacity:1}}
+.hero>div{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.hero>div+div{animation-delay:.15s}
+
+@media (max-width:900px){
+  .hero,.about,.research,.contact{grid-template-columns:1fr}
+  .impact{grid-template-columns:1fr}
+  .hero{padding-block:48px 40px;gap:32px}
+}
+@media (max-width:520px){
+  .unit{grid-template-columns:30px 30px 1fr 70px;gap:10px}
+  .leds i{width:10px}
+  .fact{grid-template-columns:1fr;gap:2px}
+  .job summary{grid-template-columns:1fr}
+  .job .when,.job .tog{grid-column:1;grid-row:auto;text-align:left}
+  .edu li{grid-template-columns:1fr;gap:2px}
+  .term-out{height:260px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<style>html,body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<canvas id="net" aria-hidden="true"></canvas>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="logo" href="#top"><i></i>ANDRIA.REZKI</a>
+    <div class="links">
+      <a href="#about"><span data-l="en">about</span><span data-l="id">profil</span></a>
+      <a href="#impact"><span data-l="en">impact</span><span data-l="id">dampak</span></a>
+      <a href="#experience"><span data-l="en">experience</span><span data-l="id">pengalaman</span></a>
+      <a href="#skills"><span data-l="en">skills</span><span data-l="id">keahlian</span></a>
+      <a href="#projects"><span data-l="en">projects</span><span data-l="id">aplikasi</span></a>
+      <a href="#shop"><span data-l="en">shop</span><span data-l="id">toko</span></a>
+      <a href="#research"><span data-l="en">research</span><span data-l="id">riset</span></a>
+      <a href="#contact"><span data-l="en">contact</span><span data-l="id">kontak</span></a>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="btn-en" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" id="btn-id" data-set="id" aria-pressed="false">ID</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Pekanbaru · Riau · Indonesia</div>
+      <h1>Andria Rezki <span class="deg">M.Kom</span></h1>
+      <div class="role" aria-live="polite"><span id="typed">IT Systems &amp; Database</span><span class="cur"></span></div>
+      <p class="lede">
+        <span data-l="en">I keep research systems and data running. For 7+ years I have run the servers, network, databases and IT support behind the Research &amp; Development division of a large agribusiness company.</span>
+        <span data-l="id">Saya menjaga sistem dan data riset tetap berjalan. Selama 7+ tahun saya mengelola server, jaringan, database, dan dukungan IT untuk divisi Research &amp; Development sebuah perusahaan agribisnis besar.</span>
+      </p>
+      <div class="cta">
+        <a class="btn pri" href="#contact"><span data-l="en">Get in touch</span><span data-l="id">Hubungi saya</span></a>
+        <a class="btn sec" href="#terminal"><span data-l="en">Open terminal</span><span data-l="id">Buka terminal</span></a>
+      </div>
+    </div>
+
+    <div class="console" aria-label="System status">
+      <div class="c-head"><span>andria@rnd:~$ status</span><span class="ok">ONLINE</span></div>
+      <div class="c-label"><span data-l="en">Service uptime since Aug 2019</span><span data-l="id">Masa layanan sejak Agu 2019</span></div>
+      <div class="uptime" id="uptime">7y 2m 05d 00:00:00</div>
+      <div class="c-row">
+        <span><span data-l="en">Data retrieval speed</span><span data-l="id">Kecepatan akses data</span></span><span class="c-val">+30%</span>
+        <div class="meter"><span style="--w:30%"></span></div>
+        <span><span data-l="en">System downtime</span><span data-l="id">Downtime sistem</span></span><span class="c-val">−25%</span>
+        <div class="meter"><span style="--w:25%"></span></div>
+        <span><span data-l="en">Server-related issues</span><span data-l="id">Masalah server</span></span><span class="c-val">−20%</span>
+        <div class="meter"><span style="--w:20%"></span></div>
+      </div>
+      <div class="c-foot">apps built: 8 · roles: sysadmin · netadmin · dba · webdev · it-support</div>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="sec-h"><code>/01 whoami</code><h2><span data-l="en">About</span><span data-l="id">Tentang Saya</span></h2></div>
+    <div class="about">
+      <div>
+        <p data-l="en">My work covers the full IT side of a research division. I design and tune the databases that hold years of field-trial data, administer the servers and network, build web apps that make data collection easier, and help staff whenever something stops working.</p>
+        <p data-l="id">Pekerjaan saya mencakup seluruh sisi IT sebuah divisi riset. Saya merancang dan mengoptimalkan database yang menyimpan data uji lapangan bertahun-tahun, mengelola server dan jaringan, membangun aplikasi web untuk mempermudah pengumpulan data, dan membantu staf setiap kali ada kendala.</p>
+        <p data-l="en">I also help prepare the annual budget each year and have served on the committee of several international conferences. My Master's thesis, on predicting rice quality with the K-Nearest Neighbours algorithm, was published in an international journal.</p>
+        <p data-l="id">Saya juga terlibat dalam penyusunan anggaran tahunan dan pernah menjadi panitia di beberapa konferensi internasional. Tesis S2 saya tentang prediksi kualitas beras menggunakan algoritma K-Nearest Neighbours telah terbit di jurnal internasional.</p>
+        <p data-l="en">Earlier roles in banking sales and telecom customer service taught me to explain technology in plain language.</p>
+        <p data-l="id">Pengalaman sebelumnya di penjualan perbankan dan layanan pelanggan telekomunikasi mengajarkan saya menjelaskan teknologi dengan bahasa yang mudah dipahami.</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><b><span data-l="en">Focus</span><span data-l="id">Fokus</span></b><span>IT Systems, Servers, Network, Database</span></div>
+        <div class="fact"><b><span data-l="en">Industry</span><span data-l="id">Industri</span></b><span><span data-l="en">Agribusiness R&amp;D</span><span data-l="id">R&amp;D Agribisnis</span></span></div>
+        <div class="fact"><b><span data-l="en">Degree</span><span data-l="id">Pendidikan</span></b><span>M.Kom, Informatics Engineering · USU</span></div>
+        <div class="fact"><b><span data-l="en">Base</span><span data-l="id">Domisili</span></b><span><span data-l="en">Pekanbaru, open to Medan</span><span data-l="id">Pekanbaru, terbuka untuk Medan</span></span></div>
+        <div class="fact"><b><span data-l="en">Languages</span><span data-l="id">Bahasa</span></b><span><span data-l="en">Indonesian, English, Arabic</span><span data-l="id">Indonesia, Inggris, Arab</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="impact">
+    <div class="sec-h"><code>/02 metrics</code><h2><span data-l="en">Measured impact</span><span data-l="id">Hasil terukur</span></h2></div>
+    <div class="impact">
+      <div class="kpi">
+        <div class="num" data-count="30">0<small>%</small></div>
+        <h3><span data-l="en">Faster data retrieval</span><span data-l="id">Akses data lebih cepat</span></h3>
+        <p><span data-l="en">Redesigned and optimized the research databases.</span><span data-l="id">Merancang ulang dan mengoptimalkan database riset.</span></p>
+        <div class="bars" aria-hidden="true"><i style="--h:100%"></i><i style="--h:100%"></i><i class="after" style="--h:70%"></i><i class="after" style="--h:70%"></i></div>
+        <div class="bars-cap"><span>query time · before</span><span>after</span></div>
+      </div>
+      <div class="kpi">
+        <div class="num" data-count="25">0<small>%</small></div>
+        <h3><span data-l="en">Less system downtime</span><span data-l="id">Downtime berkurang</span></h3>
+        <p><span data-l="en">Faster, more consistent end-user IT support.</span><span data-l="id">Dukungan IT pengguna yang lebih cepat dan konsisten.</span></p>
+        <div class="bars" aria-hidden="true"><i style="--h:100%"></i><i style="--h:100%"></i><i class="after" style="--h:75%"></i><i class="after" style="--h:75%"></i></div>
+        <div class="bars-cap"><span>downtime · before</span><span>after</span></div>
+      </div>
+      <div class="kpi">
+        <div class="num" data-count="20">0<small>%</small></div>
+        <h3><span data-l="en">Fewer server issues</span><span data-l="id">Masalah server berkurang</span></h3>
+        <p><span data-l="en">Security protocols and scheduled maintenance.</span><span data-l="id">Protokol keamanan dan perawatan terjadwal.</span></p>
+        <div class="bars" aria-hidden="true"><i style="--h:100%"></i><i style="--h:100%"></i><i class="after" style="--h:80%"></i><i class="after" style="--h:80%"></i></div>
+        <div class="bars-cap"><span>incidents · before</span><span>after</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="sec-h"><code>/03 journalctl --career</code><h2><span data-l="en">Experience</span><span data-l="id">Pengalaman</span></h2></div>
+    <div class="log">
+      <details class="job now" open>
+        <summary>
+          <h3><span data-l="en">Assistant Researcher, IT Systems &amp; Database</span><span data-l="id">Asisten Peneliti, Sistem IT &amp; Database</span></h3>
+          <span class="when">AUG 2019 — <span data-l="en">NOW</span><span data-l="id">SEKARANG</span></span>
+          <span class="org">Research Institute · Agribusiness company · Riau</span>
+          <span class="tog"></span>
+        </summary>
+        <ul data-l="en">
+          <li>Designed and optimized research databases, making data retrieval about 30% faster.</li>
+          <li>Manage all trial data (proposals, raw data, maps, reports) with regular, verified backups.</li>
+          <li>Administer servers, implement security protocols and run routine maintenance, cutting server issues by about 20%.</li>
+          <li>Manage network infrastructure for reliable, secure connectivity across the division.</li>
+          <li>Built and maintain web applications that streamline data collection and reporting.</li>
+          <li>Provide end-user IT support, reducing system downtime by about 25%.</li>
+          <li>Involved in preparing the annual budget each year.</li>
+          <li>Committee member for several international conferences.</li>
+        </ul>
+        <ul data-l="id">
+          <li>Merancang dan mengoptimalkan database riset, akses data sekitar 30% lebih cepat.</li>
+          <li>Mengelola seluruh data uji (proposal, data mentah, peta, laporan) dengan backup rutin yang terverifikasi.</li>
+          <li>Mengelola server, menerapkan protokol keamanan dan perawatan rutin, masalah server turun sekitar 20%.</li>
+          <li>Mengelola infrastruktur jaringan agar koneksi andal dan aman di seluruh divisi.</li>
+          <li>Membangun dan memelihara aplikasi web untuk pengumpulan dan pelaporan data.</li>
+          <li>Memberikan dukungan IT pengguna, downtime sistem turun sekitar 25%.</li>
+          <li>Terlibat dalam penyusunan anggaran tahunan setiap tahun.</li>
+          <li>Panitia di beberapa konferensi internasional.</li>
+        </ul>
+        <div class="tags"><span class="tag">server-admin</span><span class="tag">network</span><span class="tag">sql</span><span class="tag">backup</span><span class="tag">web-apps</span><span class="tag">budget</span></div>
+      </details>
+
+      <details class="job">
+        <summary>
+          <h3>Sales Officer</h3>
+          <span class="when">2014 — 2015</span>
+          <span class="org">PT Bank Mandiri (Persero) Tbk</span>
+          <span class="tog"></span>
+        </summary>
+        <ul data-l="en"><li>Sold banking products to individual and business customers.</li><li>Built client relationships that supported branch sales targets.</li></ul>
+        <ul data-l="id"><li>Memasarkan produk perbankan ke nasabah individu dan bisnis.</li><li>Membangun hubungan dengan nasabah untuk mendukung target cabang.</li></ul>
+      </details>
+
+      <details class="job">
+        <summary>
+          <h3>IT Staff</h3>
+          <span class="when">2013 — 2014</span>
+          <span class="org">PT Bahruny</span>
+          <span class="tog"></span>
+        </summary>
+        <ul data-l="en"><li>Day-to-day IT support for staff: computers, networks and office applications.</li></ul>
+        <ul data-l="id"><li>Dukungan IT harian untuk staf: komputer, jaringan, dan aplikasi perkantoran.</li></ul>
+      </details>
+
+      <details class="job">
+        <summary>
+          <h3>Customer Service Agent</h3>
+          <span class="when">2007 — 2009</span>
+          <span class="org">PT Telekomunikasi Selular (Telkomsel)</span>
+          <span class="tog"></span>
+        </summary>
+        <ul data-l="en"><li>Resolved customer service and billing issues by phone.</li></ul>
+        <ul data-l="id"><li>Menangani keluhan layanan dan tagihan pelanggan melalui telepon.</li></ul>
+      </details>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="sec-h"><code>/04 rack --list</code><h2><span data-l="en">Skill rack</span><span data-l="id">Rak keahlian</span></h2></div>
+    <div class="rack-ctl" role="group" aria-label="Filter skills">
+      <button type="button" class="chip" data-f="all" aria-pressed="true">all</button>
+      <button type="button" class="chip" data-f="infra" aria-pressed="false">infrastructure</button>
+      <button type="button" class="chip" data-f="data" aria-pressed="false">data</button>
+      <button type="button" class="chip" data-f="dev" aria-pressed="false">development</button>
+      <button type="button" class="chip" data-f="pro" aria-pressed="false">professional</button>
+      <button type="button" class="chip" data-f="hot" aria-pressed="false">★ in demand</button>
+      <button type="button" class="chip" data-f="learn" aria-pressed="false">learning</button>
+    </div>
+    <div class="rack" id="rack"></div>
+    <div class="rack-note"><span data-l="en">LEDs = depth of hands-on experience</span><span data-l="id">LED = tingkat pengalaman langsung</span></div>
+    <div class="stack-h"><span data-l="en">Tech stack</span><span data-l="id">Teknologi yang digunakan</span></div>
+    <div class="stack" id="stack"></div>
+
+  </section>
+
+  <section id="projects">
+    <div class="sec-h"><code>/05 ls ~/apps</code><h2><span data-l="en">Apps I've built</span><span data-l="id">Aplikasi yang saya bangun</span></h2></div>
+    <div class="rack-ctl proj-ctl" role="group" aria-label="Filter apps">
+      <button type="button" class="chip" data-p="all" aria-pressed="true">all · <span id="projCount">8</span></button>
+      <button type="button" class="chip" data-p="ops" aria-pressed="false">monitoring &amp; operations</button>
+      <button type="button" class="chip" data-p="data" aria-pressed="false">data &amp; analytics</button>
+      <button type="button" class="chip" data-p="report" aria-pressed="false">reporting portals</button>
+    </div>
+    <div class="projects" id="projList"></div>
+  </section>
+
+  <section id="shop">
+    <div class="sec-h"><code>/06 ./shop</code><h2><span data-l="en">Digital products</span><span data-l="id">Produk digital</span></h2></div>
+    <p class="shop-lede"><span data-l="en">Tools built from years of hands-on IT experience, packaged so IT, GA and admin teams can use them right away. One-time purchase, no subscription.</span><span data-l="id">Alat yang dibangun dari pengalaman IT bertahun-tahun, dikemas supaya tim IT, GA, dan admin bisa langsung memakainya. Sekali beli, tanpa langganan.</span></p>
+    <div class="shop" id="shopList"><a class="prod" href="/toko/"><div class="pb"><h3><span data-l="en">Open the shop</span><span data-l="id">Buka toko</span></h3><p class="ps">andriarezki.tech/toko</p></div></a></div>
+    <div class="shop-more"><a class="btn sec" href="/toko/"><span data-l="en">See all products</span><span data-l="id">Lihat semua produk</span></a></div>
+  </section>
+
+  <section id="research">
+    <div class="sec-h"><code>/07 publications</code><h2><span data-l="en">Research &amp; education</span><span data-l="id">Riset &amp; pendidikan</span></h2></div>
+    <div class="research">
+      <div class="card">
+        <span class="k"><span data-l="en">Published · IJPSAT</span><span data-l="id">Terbit · IJPSAT</span></span>
+        <h3>Classification Accuracy of K-Nearest Neighbours Algorithm to Predict Rice Quality</h3>
+        <p style="color:var(--muted);font-size:14px;margin:0">International Journal of Progressive Sciences and Technologies · ISSN 2509-0119</p>
+        <canvas class="knn" id="knn" width="520" height="260" aria-label="Interactive KNN demo"></canvas>
+        <div class="knn-cap" id="knnCap"><span data-l="en">Tap the plot: KNN (k=5) classifies the point by its nearest neighbours.</span><span data-l="id">Ketuk grafik: KNN (k=5) mengklasifikasi titik berdasarkan tetangga terdekat.</span></div>
+      </div>
+      <div class="card">
+        <span class="k"><span data-l="en">Education</span><span data-l="id">Pendidikan</span></span>
+        <ul class="edu">
+          <li><span class="yr">2015–2017</span><div><b>M.Kom, Informatics Engineering</b><span>Universitas Sumatera Utara · GPA 3.63</span></div></li>
+          <li><span class="yr">2008–2010</span><div><b>S.Kom, Informatics Engineering</b><span>STT Poliprofesi Medan · GPA 3.15</span></div></li>
+          <li><span class="yr">2003–2006</span><div><b>A.Md, Computer Science</b><span>Universitas Sumatera Utara · GPA 3.34</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="terminal">
+    <div class="sec-h"><code>/08 ssh guest@andria</code><h2><span data-l="en">Ask the terminal</span><span data-l="id">Tanya lewat terminal</span></h2></div>
+    <div class="term">
+      <div class="term-bar"><i></i><i></i><i></i><span>guest@andria-rezki: ~</span></div>
+      <div class="term-out" id="tout" aria-live="polite"></div>
+      <form class="term-in" id="tform" autocomplete="off">
+        <label for="tin">guest@andria:~$</label>
+        <input id="tin" type="text" spellcheck="false" placeholder="help" aria-label="Terminal command">
+      </form>
+    </div>
+    <div class="quick">
+      <button type="button" class="chip" data-cmd="whoami">whoami</button>
+      <button type="button" class="chip" data-cmd="stats">stats</button>
+      <button type="button" class="chip" data-cmd="projects">projects</button>
+      <button type="button" class="chip" data-cmd="stack">stack</button>
+      <button type="button" class="chip" data-cmd="skills">skills</button>
+      <button type="button" class="chip" data-cmd="experience">experience</button>
+      <button type="button" class="chip" data-cmd="contact">contact</button>
+      <button type="button" class="chip" data-cmd="sudo hire andria">sudo hire andria</button>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="sec-h"><code>/09 connect</code><h2><span data-l="en">Let's talk</span><span data-l="id">Mari terhubung</span></h2></div>
+    <div class="contact">
+      <div>
+        <p data-l="en">Happy to talk about IT systems, servers, databases and automation. I usually reply within a day.</p>
+        <p data-l="id">Senang berdiskusi soal sistem IT, server, database, dan otomasi. Biasanya saya membalas dalam satu hari.</p>
+      </div>
+      <div class="c-list">
+        <div class="c-item"><span class="c-label">email</span><span class="v" id="v-mail">andriarezki@gmail.com</span><button type="button" class="copy" data-copy="v-mail">copy</button></div>
+        <div class="c-item"><span class="c-label">web</span><span class="v"><a href="https://andriarezki.tech" target="_blank" rel="noopener">andriarezki.tech</a></span></div>
+        <div class="c-item"><span class="c-label">linkedin</span><span class="v"><a href="https://id.linkedin.com/in/andriarezki" target="_blank" rel="noopener">linkedin.com/in/andriarezki</a></span></div>
+        <div class="c-item"><span class="c-label">github</span><span class="v"><a href="https://github.com/andriarezki" target="_blank" rel="noopener">github.com/andriarezki</a></span></div>
+        <div class="c-item"><span class="c-label">research</span><span class="v" id="v-rid">ResearcherID J-1399-2016</span><button type="button" class="copy" data-copy="v-rid">copy</button></div>
+      </div>
+    </div>
+  </section>
+
+  <footer><span>© 2026 Andria Rezki</span><span>status: <span style="color:var(--accent)">available for new roles</span></span></footer>
+</main>
+
+<script src="https://unpkg.com/lucide@0.452.0/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* language */
+  var lang = 'en';
+  try{ lang = localStorage.getItem('ar-lang') || 'en'; }catch(e){}
+  /* shop: products come live from /toko (visibility managed in the shop admin) */
+  (function(){
+    var box = document.getElementById('shopList'); if (!box || !window.fetch) return;
+    var esc = function(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+    var money = function(v, cur){ if (!Number(v)) return 'Gratis'; return cur === 'USD' ? '$' + Number(v).toLocaleString('en-US') : 'Rp' + Number(v).toLocaleString('id-ID'); };
+    fetch('/toko/api/store').then(function(r){ return r.json(); }).then(function(d){
+      var list = (d.products || []).slice(0, 6); if (!list.length) return;
+      box.innerHTML = list.map(function(p){
+        return '<a class="prod" href="/toko/#' + encodeURIComponent(p.slug) + '">' + (p.images && p.images[0] ? '<img loading="lazy" src="/toko/img/' + encodeURIComponent(p.images[0]) + '" alt="' + esc(p.title) + '">' : '') +
+          '<div class="pb">' + (p.badge ? '<span class="badge">' + esc(p.badge) + '</span>' : '') + (p.category ? '<span class="ptag">' + esc(p.category) + '</span>' : '') +
+          '<h3>' + esc(p.title) + '</h3><p class="ps">' + esc(p.subtitle) + '</p><div class="pr"><b>' + money(p.price, p.currency) + '</b>' + (p.strikePrice > p.price ? '<s>' + money(p.strikePrice, p.currency) + '</s>' : '') + '</div></div></a>';
+      }).join('');
+    }).catch(function(){});
+  })();
+
+  function setLang(l){
+    lang = l;
+    document.body.classList.remove('lang-en','lang-id');
+    document.body.classList.add('lang-'+l);
+    document.documentElement.lang = l;
+    document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.set===l); });
+    try{ localStorage.setItem('ar-lang', l); }catch(e){}
+  }
+  document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.set); }); });
+  setLang(lang);
+
+  /* typed role */
+  var roles = ['IT Systems & Database','Server Administration','Network Administration','Database Development','Web Applications','IT Support'];
+  var typed = document.getElementById('typed');
+  if(!reduce){
+    var ri=0, ci=roles[0].length, del=true;
+    setTimeout(function tick(){
+      var r = roles[ri];
+      if(del){ ci--; if(ci<=0){ del=false; ri=(ri+1)%roles.length; } }
+      else { ci++; if(ci>=roles[ri].length){ del=true; typed.textContent=roles[ri]; return setTimeout(tick,2200); } }
+      typed.textContent = roles[ri].slice(0,ci);
+      setTimeout(tick, del?35:70);
+    }, 2400);
+  }
+
+  /* uptime since 1 Aug 2019 */
+  var start = new Date(2019,7,1,8,0,0);
+  var up = document.getElementById('uptime');
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function uptime(){
+    var now = new Date();
+    var y = now.getFullYear()-start.getFullYear(), m = now.getMonth()-start.getMonth(), d = now.getDate()-start.getDate();
+    if(d<0){ m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+    if(m<0){ y--; m+=12; }
+    up.textContent = y+'y '+m+'m '+pad(d)+'d '+pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
+  }
+  uptime(); setInterval(uptime,1000);
+
+  /* KPI counters (start visible at final value if no motion) */
+  var nums = document.querySelectorAll('.num[data-count]');
+  function setNum(el,v){ el.firstChild.nodeValue = String(v); }
+  nums.forEach(function(el){ setNum(el, el.dataset.count); });
+  if(!reduce && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return; io.unobserve(e.target);
+        var el=e.target, to=+el.dataset.count, t0=performance.now();
+        (function step(t){ var p=Math.min(1,(t-t0)/1200); setNum(el, Math.round(to*(1-Math.pow(1-p,3)))); if(p<1) requestAnimationFrame(step); })(t0);
+      });
+    },{threshold:.5});
+    nums.forEach(function(n){ io.observe(n); });
+  }
+
+  /* skill rack: [name, detail, group, level 1-5, icon, flag] flag: hot = in high demand, learn = currently learning */
+  var skills = [
+    ['Server Administration','security protocols · maintenance','infra',5,'server'],
+    ['Network Administration','LAN · Wi-Fi · intranet','infra',4,'network'],
+    ['IT Monitoring & Observability','uptime · incidents · alerting','infra',5,'activity','hot'],
+    ['Security & Hardening','access control · patching · SSL','infra',4,'shield-check','hot'],
+    ['IT End-User Support','hardware · software · troubleshooting','infra',5,'headset'],
+    ['Application Deployment','rollout · configuration · offline installers','infra',4,'rocket'],
+    ['Docker & Compose','containerized services in production','infra',3,'container','hot'],
+    ['Nginx · Reverse Proxy & SSL','virtual hosts · Let\u2019s Encrypt · basic auth','infra',3,'globe'],
+    ['SQL & Database Design','schema · optimization · tuning','data',5,'database'],
+    ['Data Management & Backup','integrity · recovery','data',5,'hard-drive'],
+    ['Data Analytics & BI Dashboards','KPIs · charts · Excel/CSV pipelines','data',4,'chart-pie','hot'],
+    ['Machine Learning (KNN)','classification · published research','data',3,'brain','hot'],
+    ['Python Automation','monitoring agent · scripts','data',3,'terminal','hot'],
+    ['Workflow Automation (n8n)','webhooks · scheduled reports · alerts','data',3,'workflow','hot'],
+    ['Full-Stack Web Development','PHP · Node.js · JavaScript · MySQL','dev',4,'code','hot'],
+    ['REST API Design','web ↔ mobile contracts','dev',3,'plug'],
+    ['AI Integration (LLM)','AI assistant in QA console · AI coding agent ops','dev',3,'sparkles','hot'],
+    ['CMS / WordPress','sites · content management','dev',4,'layout-grid'],
+    ['Budget Preparation','annual CAPEX/OPEX planning','pro',4,'wallet'],
+    ['Conference Committee','international events','pro',3,'presentation'],
+    ['Stakeholder Communication','researchers · non-technical users','pro',4,'users'],
+    ['Cloud (Azure / AWS)','learning · 2026','learn',1,'cloud','learn'],
+    ['Kubernetes','learning · 2026','learn',1,'boxes','learn'],
+    ['Power BI','learning · 2026','learn',2,'chart-column','learn'],
+    ['Cybersecurity (SOC / Zero Trust)','learning · 2026','learn',1,'lock','learn']
+  ];
+  var rack = document.getElementById('rack');
+  rack.innerHTML = skills.map(function(s,i){
+    var leds=''; for(var k=0;k<5;k++) leds+='<i class="'+(k<s[3]?'on':'')+'"></i>';
+    var flag = s[5]==='hot' ? '<span class="flag hot">in demand</span>' : s[5]==='learn' ? '<span class="flag learn">learning</span>' : '';
+    return '<div class="unit" data-g="'+s[2]+'" data-f="'+(s[5]||'')+'"><span class="u">U'+pad(i+1)+'</span><span class="ui"><i class="ico" data-lucide="'+s[4]+'"></i></span><span class="nm">'+s[0].replace('&','&amp;')+flag+'<small>'+s[1]+'</small></span><span class="leds" aria-label="'+s[3]+' of 5">'+leds+'</span></div>';
+  }).join('');
+
+  /* tech stack: key, label, role, brand hex, simple-icons slug candidates */
+  var tech = [
+    ['python','Python','automation · agent','#3776AB',['python']],
+    ['node','Node.js','back-end','#339933',['nodedotjs','node-dot-js']],
+    ['php','PHP','back-end','#777BB4',['php']],
+    ['mysql','MySQL','database','#4479A1',['mysql']],
+    ['javascript','JavaScript','front-end','#F7DF1E',['javascript']],
+    ['html5','HTML5','markup','#E34F26',['html5']],
+    ['css3','CSS3','styling','#1572B6',['css3']],
+    ['chartjs','Chart.js','dashboards','#FF6384',['chartdotjs','chart-dot-js']],
+    ['wordpress','WordPress','cms','#21759B',['wordpress']],
+    ['linux','Linux','server os','#FCC624',['linux']],
+    ['docker','Docker','containers','#2496ED',['docker']],
+    ['nginx','Nginx','reverse proxy · ssl','#009639',['nginx']],
+    ['sqlite','SQLite','embedded db','#003B57',['sqlite']],
+    ['n8n','n8n','workflow automation','#EA4B71',['n8n']],
+    ['bash','Bash','shell scripting','#4EAA25',['gnubash']],
+    ['windows','Windows','server · client','#0078D6',['windows']],
+    ['telegram','Telegram Bot','alerting','#26A5E4',['telegram']],
+    ['excel','Microsoft Excel','data · import','#217346',['microsoftexcel']],
+    ['ga','Google Analytics','web analytics','#E37400',['googleanalytics']]
+  ];
+  var techMap={}; tech.forEach(function(t){ techMap[t[0]]=t; });
+  function si(key){ var t=techMap[key]; return '<span class="si" data-si="'+key+'" aria-hidden="true">'+(t?t[1].slice(0,2).toUpperCase():'')+'</span>'; }
+  document.getElementById('stack').innerHTML = tech.map(function(t){
+    return '<div class="tech" style="--c:'+t[3]+'"><span class="tile">'+si(t[0])+'</span><span><b>'+t[1]+'</b><small>'+t[2]+'</small></span></div>';
+  }).join('');
+
+  /* projects (apps built) */
+  var projects = [
+    {g:'ops', cat:'IT monitoring', icon:'activity', viz:'wall',
+     en:['Network Monitor','Real-time monitoring for LAN devices and web services: routers, switches, servers, CCTV, printers and internal apps, with alerts the moment something goes down.',['Ping, TCP port and HTTP/SSL checks','Status wall, uptime and incident history','Network discovery and NOC wall-screen mode','Python agent with REST API and Telegram alerts']],
+     id:['Network Monitor','Monitoring real-time perangkat LAN dan layanan web: router, switch, server, CCTV, printer, dan aplikasi internal, dengan notifikasi saat ada yang mati.',['Cek ping, port TCP, dan HTTP/SSL','Status wall, uptime, dan riwayat insiden','Network discovery dan mode layar NOC','Agent Python dengan REST API dan notifikasi Telegram']],
+     stack:['python','javascript','html5','css3','telegram']},
+    {g:'ops', cat:'uptime & SLA reports', icon:'gauge', viz:'wall',
+     en:['Uptime Monitoring & Downtime Reports','Uptime monitoring for public websites and internal office apps, with a public status page and downloadable downtime reports for management.',['HTTP, TCP port, ping and SSL-expiry checks every minute','Public status page reachable through strict office firewalls','Downtime report: start/end time, duration and plain-language cause','Excel and PDF export, manual incident notes, daily uptime %','Offline installer for Windows Server with auto-start and watchdog']],
+     id:['Monitoring Uptime & Laporan Downtime','Monitoring uptime untuk website publik dan aplikasi internal kantor, dengan halaman status publik dan laporan downtime yang bisa diunduh untuk manajemen.',['Cek HTTP, port TCP, ping, dan masa berlaku SSL tiap menit','Halaman status yang tetap bisa dibuka dari jaringan kantor yang ketat','Laporan downtime: jam mulai/selesai, durasi, dan penyebab dalam bahasa mudah','Ekspor Excel dan PDF, catatan insiden manual, uptime harian','Installer offline untuk Windows Server dengan auto-start dan watchdog']],
+     stack:['node','javascript','sqlite','docker','nginx','windows','excel','telegram'], tags:['Uptime Kuma','status page']},
+    {g:'ops', cat:'backup compliance', icon:'hard-drive', viz:'flow',
+     en:['PC Backup Monitor','Automated check of weekly Windows backups for dozens of PCs, replacing a manual monthly review of backup folders.',['Batch script lists backup sets on the storage server (no PowerShell needed)','n8n workflow classifies each PC: OK, late, failed or anomaly','Monthly Excel report generated automatically','Offline variant that builds an HTML/CSV summary on the server itself']],
+     id:['Monitor Backup PC','Pengecekan otomatis backup Windows mingguan untuk puluhan PC, menggantikan pengecekan folder backup manual setiap bulan.',['Script batch membaca daftar backup di server storage (tanpa PowerShell)','Workflow n8n mengklasifikasi tiap PC: OK, telat, gagal, atau anomali','Laporan Excel bulanan dibuat otomatis','Versi offline yang membuat ringkasan HTML/CSV langsung di server']],
+     stack:['n8n','javascript','windows','excel']},
+    {g:'ops', cat:'operations · live', icon:'car', viz:'phone',
+     en:['GA Driver Ops','Daily driver operations for General Affairs. Admins plan trips on the web, drivers run them from an Android app, and every update appears live on the dashboard.',['Trip scheduling and vehicle assignment','Driver check-in and daily vehicle inspection (P2H)','Live activity feed synced from the driver app','Excel import and role-based access']],
+     id:['GA Driver Ops','Operasional driver harian untuk GA. Admin menyusun jadwal di web, driver menjalankannya dari aplikasi Android, dan setiap update langsung tampil di dashboard.',['Penjadwalan perjalanan dan penugasan kendaraan','Check-in driver dan P2H kendaraan harian','Feed aktivitas live dari aplikasi driver','Import Excel dan akses berbasis peran']],
+     stack:['javascript','html5','css3','excel'], tags:['Android app','REST API']},
+    {g:'ops', cat:'facility', icon:'calendar-check', viz:'cal',
+     en:['Meeting Room Booking','Booking system for meeting rooms so teams can check availability and reserve a room without double bookings.',['Room availability calendar','Booking requests with conflict checks','Room usage overview for GA']],
+     id:['Booking Ruang Meeting','Sistem booking ruang meeting agar tim bisa melihat ketersediaan dan memesan ruangan tanpa bentrok.',['Kalender ketersediaan ruangan','Permintaan booking dengan cek bentrok','Ringkasan pemakaian ruangan untuk GA']],
+     stack:['javascript','html5','css3']},
+    {g:'data', cat:'asset management', icon:'laptop', viz:'map',
+     en:['Asset Dashboard','CAPEX asset dashboard for IT and equipment across buildings and departments.',['CAPEX trend and value by category','GPS map of asset locations','Data-quality score for photo, document, GPS and PIC','Presentation mode for management reviews']],
+     id:['Asset Dashboard','Dashboard aset CAPEX untuk perangkat IT dan peralatan di seluruh gedung dan departemen.',['Tren CAPEX dan nilai per kategori','Peta GPS lokasi aset','Skor kualitas data: foto, dokumen, GPS, PIC','Mode presentasi untuk review manajemen']],
+     stack:['chartjs','javascript','html5','css3']},
+    {g:'data', cat:'research analytics', icon:'leaf', viz:'yield',
+     en:['Field Research Board','Analytics board that links crop production with weather station data for research teams.',['Yield, quality and field-condition metrics','FAO-56 Penman–Monteith water balance','Rainfall-to-yield lag correlation up to 36 months','CSV/Excel upload with automatic column mapping']],
+     id:['Field Research Board','Dashboard analitik yang menghubungkan produksi tanaman dengan data stasiun cuaca untuk tim riset.',['Metrik produksi, kualitas, dan kondisi lapangan','Neraca air FAO-56 Penman–Monteith','Korelasi lag curah hujan ke produksi hingga 36 bulan','Upload CSV/Excel dengan pemetaan kolom otomatis']],
+     stack:['chartjs','javascript','excel']},
+    {g:'data', cat:'QA & release', icon:'shield-check', viz:'gate',
+     en:['Shipwatch Console','QA console that tracks web app health, bugs and test runs, and decides whether a release is ready to ship.',['Uptime, response time and Core Web Vitals','Bug tracker with severity levels','Test runs, pass rate and flaky tests','Release gate and AI QA assistant']],
+     id:['Shipwatch Console','Konsol QA untuk memantau kesehatan aplikasi web, bug, dan hasil test, lalu menentukan apakah rilis siap.',['Uptime, response time, dan Core Web Vitals','Bug tracker dengan level severity','Hasil test, pass rate, dan flaky test','Release gate dan asisten QA berbasis AI']],
+     stack:['javascript','html5','css3'], tags:['AI assistant','shared database']},
+    {g:'report', cat:'reporting portal', icon:'file-check', viz:'flow',
+     en:['Activity Reporting Portal','Activity reporting for a department, from field report to approval and budget tracking.',['Section-based roles with approval workflow','Attachments, comments and notifications','CAPEX/OPEX budget plan parsed from Excel','Additional budget requests and analytics']],
+     id:['Portal Laporan Aktivitas','Pelaporan aktivitas departemen, dari laporan lapangan hingga persetujuan dan pemantauan anggaran.',['Peran per seksi dengan alur persetujuan','Lampiran, komentar, dan notifikasi','Rencana anggaran CAPEX/OPEX dibaca dari Excel','Permintaan tambahan anggaran dan analitik']],
+     stack:['nodejs','mysql','javascript','chartjs','excel'].map(function(k){return k==='nodejs'?'node':k;})},
+    {g:'report', cat:'reporting portal', icon:'file-text', viz:'bars',
+     en:['Ledger Reporting Portal','Company reporting portal where staff submit reports and managers review and approve them.',['Admin, manager and staff roles','Approval timeline and comments','Dashboard and department analytics','CSV export']],
+     id:['Portal Laporan Ledger','Portal pelaporan perusahaan: staf mengirim laporan, manajer meninjau dan menyetujuinya.',['Peran admin, manajer, dan staf','Timeline persetujuan dan komentar','Dashboard dan analitik per departemen','Ekspor CSV']],
+     stack:['chartjs','javascript','html5','css3']}
+  ];
+  function projHTML(pr){
+    function lang(l){ var d=pr[l]; return '<div data-l="'+l+'"><h3>'+d[0]+'</h3><p style="margin-top:8px">'+d[1]+'</p><ul class="feat" style="margin-top:10px">'+d[2].map(function(f){return '<li>'+f+'</li>';}).join('')+'</ul></div>'; }
+    var uses = pr.stack.map(function(s){ return '<span class="use">'+si(s)+techMap[s][1]+'</span>'; }).join('') +
+      (pr.tags||[]).map(function(t){ return '<span class="use"><i class="ico" data-lucide="sparkles"></i>'+t+'</span>'; }).join('');
+    return '<article class="proj" data-g="'+pr.g+'"><div class="shot"><canvas data-viz="'+pr.viz+'" width="480" height="270" aria-hidden="true"></canvas><span class="badge">'+pr.cat+'</span></div>'+
+      '<div class="body"><span class="cat"><i class="ico" data-lucide="'+pr.icon+'"></i>'+pr.cat+'</span>'+lang('en')+lang('id')+'<div class="uses">'+uses+'</div></div></article>';
+  }
+  document.getElementById('projList').innerHTML = projects.map(projHTML).join('');
+  var pc=document.getElementById('projCount'); if(pc) pc.textContent=projects.length;
+  document.querySelectorAll('.proj-ctl .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('.proj-ctl .chip').forEach(function(x){ x.setAttribute('aria-pressed', x===c); });
+      document.querySelectorAll('.proj').forEach(function(p){ p.hidden = !(c.dataset.p==='all' || p.dataset.g===c.dataset.p); });
+    });
+  });
+
+  /* project preview drawings */
+  (function(){
+    var cs=getComputedStyle(document.documentElement);
+    var A=cs.getPropertyValue('--accent').trim(), B=cs.getPropertyValue('--amber').trim(), L=cs.getPropertyValue('--line').trim(), M=cs.getPropertyValue('--muted').trim(), P=cs.getPropertyValue('--panel').trim(), BG=cs.getPropertyValue('--bg').trim(), R='#e2645a';
+    function rr(x,X,Y,W,H,r){ x.beginPath(); x.moveTo(X+r,Y); x.arcTo(X+W,Y,X+W,Y+H,r); x.arcTo(X+W,Y+H,X,Y+H,r); x.arcTo(X,Y+H,X,Y,r); x.arcTo(X,Y,X+W,Y,r); x.closePath(); }
+    document.querySelectorAll('canvas[data-viz]').forEach(function(c){
+      var x=c.getContext('2d'), w=c.width, h=c.height, v=c.dataset.viz, s=7;
+      function r(){ s=(s*16807)%2147483647; return s/2147483647; }
+      x.fillStyle=P; x.fillRect(0,0,w,h);
+      x.strokeStyle=L; x.lineWidth=1; for(var gx=0;gx<w;gx+=30){x.beginPath();x.moveTo(gx,0);x.lineTo(gx,h);x.stroke();}
+      x.font='11px monospace';
+      if(v==='wall'){
+        for(var i=0;i<24;i++){ var cx=24+(i%6)*74, cy=50+Math.floor(i/6)*52, st=i===9?'d':(i===14||i===20)?'w':'u';
+          x.fillStyle=BG; rr(x,cx,cy,64,40,6); x.fill(); x.fillStyle=st==='d'?R:st==='w'?B:A; x.fillRect(cx,cy,4,40);
+          x.fillStyle=M; x.fillRect(cx+12,cy+12,36,5); x.fillStyle=st==='d'?R:A; x.fillRect(cx+12,cy+24,20,4); }
+      } else if(v==='phone'){
+        x.fillStyle=BG; rr(x,40,40,240,190,8); x.fill();
+        for(var j=0;j<4;j++){ x.fillStyle=L; x.fillRect(56,62+j*40,200,24); x.fillStyle=j===1?B:A; x.fillRect(56,62+j*40,4,24); x.fillStyle=M; x.fillRect(70,70+j*40,110,6); }
+        x.fillStyle='#050b14'; rr(x,320,20,120,232,18); x.fill(); x.fillStyle=BG; rr(x,328,30,104,212,12); x.fill();
+        x.fillStyle=A; x.fillRect(328,44,104,30); for(var k=0;k<3;k++){ x.fillStyle=k===0?B:L; rr(x,336,84+k*48,88,38,6); x.fill(); }
+      } else if(v==='cal'){
+        var days=['Mon','Tue','Wed','Thu','Fri']; x.fillStyle=M; days.forEach(function(d,i){ x.fillText(d,70+i*80,40); });
+        for(var hr=0;hr<5;hr++){ x.fillStyle=M; x.fillText(pad(8+hr*2)+':00',14,72+hr*40); x.strokeStyle=L; x.beginPath(); x.moveTo(60,60+hr*40); x.lineTo(w-14,60+hr*40); x.stroke(); }
+        [[0,0,2,A],[1,1,1,B],[2,2,2,A],[3,0,1,A],[4,3,1,B],[1,3,2,A]].forEach(function(b){ x.fillStyle=b[3]; x.globalAlpha=.85; rr(x,64+b[0]*80,62+b[1]*40,72,b[2]*40-6,6); x.fill(); x.globalAlpha=1; });
+      } else if(v==='map'){
+        [[30,30,200,110,'Main'],[250,30,200,90,'Sub'],[30,160,160,90,'Warehouse'],[210,140,150,110,'Meeting']].forEach(function(b){ x.fillStyle=BG; rr(x,b[0],b[1],b[2],b[3],10); x.fill(); x.strokeStyle=L; x.stroke(); x.fillStyle=M; x.fillText(b[4],b[0]+10,b[1]+18); });
+        for(var d=0;d<36;d++){ x.fillStyle=[A,B,'#7aa2e3'][d%3]; x.beginPath(); x.arc(40+r()*400,50+r()*200,4.5,0,7); x.fill(); }
+      } else if(v==='yield'){
+        x.fillStyle='rgba(122,169,221,.35)'; for(var m=0;m<24;m++){ var rh=10+r()*50; x.fillRect(24+m*18,h-24-rh,12,rh); }
+        x.strokeStyle=A; x.lineWidth=2.5; x.beginPath(); for(var p=0;p<24;p++){ var yy=120-Math.sin(p/3.6)*40-p*1.2+r()*10; p?x.lineTo(30+p*18,yy):x.moveTo(30,yy);} x.stroke();
+        x.strokeStyle=B; x.setLineDash([5,5]); x.beginPath(); x.moveTo(30,90); x.lineTo(450,70); x.stroke(); x.setLineDash([]); x.lineWidth=1;
+        x.fillStyle=M; x.fillText('FFB t/ha',24,26); x.fillText('rain mm',24,h-8);
+      } else if(v==='gate'){
+        x.fillStyle=A; x.font='bold 22px monospace'; x.fillText('GO',36,58); x.font='11px monospace';
+        for(var q=0;q<6;q++){ var ok=q!==3; x.fillStyle=ok?A:R; x.fillText(ok?'✓':'✗',36,92+q*28); x.fillStyle=M; x.fillRect(56,84+q*28,140+r()*60,6); }
+        x.strokeStyle=A; x.lineWidth=2; x.beginPath(); for(var t=0;t<20;t++){ var y2=150+Math.sin(t)*14+r()*16; t?x.lineTo(270+t*10,y2):x.moveTo(270,y2);} x.stroke(); x.lineWidth=1;
+        x.fillStyle=M; x.fillText('p95 response',270,110);
+      } else if(v==='flow'){
+        var steps=['Draft','Submitted','Review','Approved']; steps.forEach(function(sn,i){ var bx=24+i*112; x.fillStyle=i===3?A:BG; rr(x,bx,104,96,52,8); x.fill(); x.strokeStyle=i===3?A:L; x.stroke(); x.fillStyle=i===3?BG:M; x.fillText(sn,bx+12,134); if(i<3){ x.strokeStyle=B; x.beginPath(); x.moveTo(bx+98,130); x.lineTo(bx+110,130); x.stroke(); } });
+        x.fillStyle=M; x.fillText('CAPEX',24,206); x.fillText('OPEX',24,230); x.fillStyle=A; x.fillRect(80,198,260,10); x.fillStyle=B; x.fillRect(80,222,190,10);
+      } else {
+        x.fillStyle=L; x.fillRect(24,30,w-48,18); x.fillStyle=M; x.fillText('reports · last 6 months',30,43);
+        for(var bi=0;bi<6;bi++){ var bh=50+r()*110; x.fillStyle=bi===5?A:'rgba(72,214,170,.35)'; x.fillRect(40+bi*70,h-30-bh,44,bh); }
+      }
+    });
+  })();
+
+  /* brand icons: simple-icons v4 ships one CommonJS file per icon, loaded as plain scripts */
+  (function(){
+    var keys=Object.keys(techMap);
+    function paint(key,ic){
+      var col='color-mix(in srgb,#'+ic.hex+' 78%,white)';
+      document.querySelectorAll('[data-si="'+key+'"]').forEach(function(el){
+        el.innerHTML='<svg viewBox="0 0 24 24" role="img" aria-label="'+ic.title+'"><path fill="'+col+'" d="'+ic.path+'"/></svg>';
+      });
+    }
+    function tryLoad(ki,ci){
+      if(ki>=keys.length) return;
+      var t=techMap[keys[ki]], slugs=t[4];
+      if(ci>=slugs.length) return tryLoad(ki+1,0);
+      var prev=window.module; window.module={exports:{}};
+      var sc=document.createElement('script');
+      sc.src='https://cdn.jsdelivr.net/npm/simple-icons@4.25.0/icons/'+slugs[ci]+'.js';
+      sc.onload=function(){ var ic=window.module.exports; window.module=prev; if(ic&&ic.path){ paint(keys[ki],ic); tryLoad(ki+1,0); } else tryLoad(ki,ci+1); };
+      sc.onerror=function(){ window.module=prev; tryLoad(ki,ci+1); };
+      document.head.appendChild(sc);
+    }
+    tryLoad(0,0);
+  })();
+
+  /* outline icons */
+  if(window.lucide && lucide.createIcons){ try{ lucide.createIcons({attrs:{'stroke-width':1.75}}); }catch(e){} }
+
+  document.querySelectorAll('.rack-ctl .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('.rack-ctl .chip').forEach(function(x){ x.setAttribute('aria-pressed', x===c); });
+      var f=c.dataset.f;
+      rack.querySelectorAll('.unit').forEach(function(u){
+        var hit = f==='all' || u.dataset.g===f || u.dataset.f===f;
+        u.classList.toggle('dim', !hit); u.classList.toggle('hit', hit && f!=='all');
+      });
+    });
+  });
+
+  /* KNN demo */
+  var kc=document.getElementById('knn'), kx=kc.getContext('2d'), W=kc.width, H=kc.height;
+  var css=getComputedStyle(document.documentElement);
+  var cA=css.getPropertyValue('--accent').trim(), cB=css.getPropertyValue('--amber').trim(), cL=css.getPropertyValue('--line').trim(), cM=css.getPropertyValue('--muted').trim(), cF=css.getPropertyValue('--fg').trim();
+  var seed=7; function rnd(){ seed=(seed*16807)%2147483647; return seed/2147483647; }
+  var pts=[];
+  for(var i=0;i<34;i++){ pts.push({x:60+rnd()*190, y:40+rnd()*170, c:0}); }
+  for(var j=0;j<34;j++){ pts.push({x:260+rnd()*200, y:60+rnd()*170, c:1}); }
+  var probe={x:255,y:130}, K=5;
+  function drawKNN(){
+    kx.clearRect(0,0,W,H);
+    kx.strokeStyle=cL; kx.lineWidth=1;
+    for(var gx=0;gx<W;gx+=40){kx.beginPath();kx.moveTo(gx,0);kx.lineTo(gx,H);kx.stroke();}
+    for(var gy=0;gy<H;gy+=40){kx.beginPath();kx.moveTo(0,gy);kx.lineTo(W,gy);kx.stroke();}
+    var near = pts.map(function(p){ return {p:p,d:Math.hypot(p.x-probe.x,p.y-probe.y)}; }).sort(function(a,b){return a.d-b.d;}).slice(0,K);
+    kx.strokeStyle=cM; kx.setLineDash([4,4]);
+    near.forEach(function(n){ kx.beginPath(); kx.moveTo(probe.x,probe.y); kx.lineTo(n.p.x,n.p.y); kx.stroke(); });
+    kx.setLineDash([]);
+    pts.forEach(function(p){ kx.fillStyle=p.c?cB:cA; kx.beginPath(); kx.arc(p.x,p.y,4,0,7); kx.fill(); });
+    var votes=near.filter(function(n){return n.p.c===1;}).length, cls = votes>K/2?1:0;
+    kx.fillStyle=cls?cB:cA; kx.strokeStyle=cF; kx.lineWidth=2;
+    kx.beginPath(); kx.arc(probe.x,probe.y,8,0,7); kx.fill(); kx.stroke();
+    kx.font='12px "JetBrains Mono", monospace'; kx.fillStyle=cA; kx.fillText('● premium',12,20); kx.fillStyle=cB; kx.fillText('● standard',110,20);
+    kx.fillStyle=cF; kx.fillText('→ '+(cls?'standard':'premium')+' ('+(cls?votes:K-votes)+'/'+K+' votes)', 12, H-12);
+  }
+  function pos(e){ var r=kc.getBoundingClientRect(); return {x:(e.clientX-r.left)*W/r.width, y:(e.clientY-r.top)*H/r.height}; }
+  kc.addEventListener('pointerdown', function(e){ probe=pos(e); drawKNN(); });
+  kc.addEventListener('pointermove', function(e){ if(e.buttons||e.pointerType==='mouse'){ probe=pos(e); drawKNN(); } });
+  drawKNN();
+
+  /* terminal */
+  var out=document.getElementById('tout'), tin=document.getElementById('tin');
+  function esc(s){ return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
+  function print(html){ out.insertAdjacentHTML('beforeend', html+'\n'); out.scrollTop=out.scrollHeight; }
+  var cmds={
+    help:function(){ return '<span class="m">available commands:</span>\n  whoami      who is Andria\n  projects    apps built\n  stack       tech stack\n  stats       measured impact\n  skills      core skill set\n  experience  career log\n  education   degrees\n  contact     how to reach me\n  clear       clear screen'; },
+    whoami:function(){ return 'Andria Rezki, M.Kom\nIT Systems & Database professional · 7+ yrs in agribusiness R&D\nservers · network · databases · web apps · IT support'; },
+    stats:function(){ return '<span class="p">+30%</span> data retrieval speed\n<span class="p">-25%</span> system downtime\n<span class="p">-20%</span> server-related issues\n<span class="m">uptime: '+up.textContent+'</span>'; },
+    skills:function(){ return skills.map(function(s){ return (s[0]+'                              ').slice(0,30)+'<span class="p">'+'█'.repeat(s[3])+'</span><span class="m">'+'░'.repeat(5-s[3])+'</span>'; }).join('\n'); },
+    experience:function(){ return '<span class="p">2019–now</span>  Assistant Researcher, IT Systems & Database · Agribusiness R&D\n<span class="m">2014–2015</span>  Sales Officer · Bank Mandiri\n<span class="m">2013–2014</span>  IT Staff · PT Bahruny\n<span class="m">2007–2009</span>  Customer Service · Telkomsel'; },
+    education:function(){ return 'M.Kom  Informatics Engineering · USU (3.63)\nS.Kom  Informatics Engineering · STT Poliprofesi (3.15)\nA.Md   Computer Science · USU (3.34)'; },
+    projects:function(){ return projects.map(function(pr){ return '<span class="p">'+pr.en[0]+'</span>  <span class="m">['+pr.cat+']</span>\n  '+(pr.stack.map(function(s){return techMap[s][1];}).concat(pr.tags||[])).join(' · '); }).join('\n'); },
+    stack:function(){ return tech.map(function(t){ return (t[1]+'                    ').slice(0,20)+'<span class="m">'+t[2]+'</span>'; }).join('\n'); },
+    contact:function(){ return 'email     andriarezki@gmail.com\nweb       andriarezki.tech\nlinkedin  linkedin.com/in/andriarezki\ngithub    github.com/andriarezki'; }
+  };
+  function run(raw){
+    var c=raw.trim(); if(!c) return;
+    print('<span class="p">guest@andria:~$</span> '+esc(c));
+    var key=c.toLowerCase();
+    if(key==='clear'){ out.innerHTML=''; return; }
+    if(key.indexOf('sudo hire')===0){ print('<span class="a">[sudo] permission granted.</span>\nScheduling interview... ✔\nNext step: email andriarezki@gmail.com'); return; }
+    if(key==='ls') key='help';
+    print(cmds[key] ? cmds[key]() : '<span class="a">command not found:</span> '+esc(c)+'  <span class="m">(try "help")</span>');
+  }
+  print('<span class="m">Welcome. Connected to andria-rezki (Pekanbaru, ID).</span>\nType <span class="p">help</span> or tap a command below.\n');
+  run('whoami');
+  document.getElementById('tform').addEventListener('submit', function(e){ e.preventDefault(); run(tin.value); tin.value=''; });
+  document.querySelectorAll('[data-cmd]').forEach(function(b){ b.addEventListener('click', function(){ run(b.dataset.cmd); }); });
+
+  /* copy */
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click', function(){
+      var el=document.getElementById(b.dataset.copy), txt=el.textContent.trim();
+      function done(){ b.textContent='copied'; setTimeout(function(){ b.textContent='copy'; },1500); }
+      function sel(){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent='selected'; setTimeout(function(){ b.textContent='copy'; },1500); }
+      try{ navigator.clipboard.writeText(txt).then(done, sel); }catch(e){ sel(); }
+    });
+  });
+
+  /* background network */
+  var cv=document.getElementById('net'), cx=cv.getContext('2d'), nodes=[], mouse={x:-999,y:-999}, dpr=Math.min(window.devicePixelRatio||1,2);
+  function size(){
+    cv.width=innerWidth*dpr; cv.height=innerHeight*dpr; cx.setTransform(dpr,0,0,dpr,0,0);
+    var n=Math.round(Math.min(90, innerWidth*innerHeight/16000));
+    nodes=[]; for(var i=0;i<n;i++) nodes.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25});
+  }
+  function frame(){
+    cx.clearRect(0,0,innerWidth,innerHeight);
+    for(var i=0;i<nodes.length;i++){
+      var a=nodes[i];
+      if(!reduce){ a.x+=a.vx; a.y+=a.vy; if(a.x<0||a.x>innerWidth)a.vx*=-1; if(a.y<0||a.y>innerHeight)a.vy*=-1; }
+      for(var j=i+1;j<nodes.length;j++){
+        var b=nodes[j], d=Math.hypot(a.x-b.x,a.y-b.y);
+        if(d<140){ cx.strokeStyle='rgba(72,214,170,'+(0.16*(1-d/140))+')'; cx.lineWidth=1; cx.beginPath(); cx.moveTo(a.x,a.y); cx.lineTo(b.x,b.y); cx.stroke(); }
+      }
+      var md=Math.hypot(a.x-mouse.x,a.y-mouse.y);
+      if(md<180){ cx.strokeStyle='rgba(72,214,170,'+(0.45*(1-md/180))+')'; cx.beginPath(); cx.moveTo(a.x,a.y); cx.lineTo(mouse.x,mouse.y); cx.stroke(); }
+      cx.fillStyle= md<180 ? 'rgba(72,214,170,.95)' : 'rgba(72,214,170,.45)';
+      cx.beginPath(); cx.arc(a.x,a.y,md<180?2.4:1.6,0,7); cx.fill();
+    }
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  addEventListener('resize', function(){ size(); if(reduce) frame(); });
+  addEventListener('pointermove', function(e){ mouse.x=e.clientX; mouse.y=e.clientY; if(reduce) frame(); });
+  size(); frame();
+})();
+</script>
+
+</body>
+</html>
